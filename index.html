@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AFRO VITA: An interactive dashboard tracking urban health and resources across the African continent using World Bank Data.">
+    <title>AFRO VITA - African Health Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css"> 
+</head>
+<body>
+
+    <header role="banner">
+        <h1>AFRO VITA</h1>
+        <p id="app-description">The Urban Health & Resource Tracker for Africa</p>
+    </header>
+
+    <main role="main">
+        <section id="controls" aria-label="Dashboard Controls">
+            
+            <div class="filters">
+                <div class="health-indicator">
+                <label for="indicator" class="sr-only">Health Indicator:</label>
+                <select id="indicator" name="indicator" aria-controls="results-container">
+                    <option value="SH.STA.MALR">Malaria Incidence (per 1k)</option>
+                    <option value="SH.STA.HYGN.ZS">Basic Hygiene Access (Typhoid Proxy %)</option>
+                    <option value="SH.H2O.BASW.ZS">Basic Drinking Water Access (%)</option>
+                    <option value="SP.DYN.IMRT.IN">Infant Mortality Rate</option>
+                </select> <br>
+                </div>
+
+                <div class="region">
+                <label for="region" class="sr-only">Region:</label>
+                <select id="region" name="region" aria-controls="results-container">
+                    <option value="General">All of Africa</option>
+                    <option value="North">North Arfica</option>
+                    <option value="East">East Africa</option>
+                    <option value="West">West Africa</option>
+                    <option value="West">Central Africa</option>
+                    <option value="South">South Africa</option>
+                </select> <br>
+                </div>
+
+                <div class="year">
+                <label for="year" class="sr-only">Region:</label>
+                <select id="year" name="year" aria-controls="results-container">
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                    <option value="2021">2021</option>
+                    <option value="2020">2020</option>
+                    <option value="2019">2019</option>
+                    <option value="2018">2018</option>
+                    <option value="2017">2017</option>
+                    <option value="2016">2016</option>
+                    <option value="2015">2015</option>
+                    <option value="2014">2014</option>
+                    <option value="2013">2013</option>
+                </select> <br>
+                </div>
+            </div>
+
+
+            <div class="control-group">
+                <button id="btn-critical" aria-controls="results-container">
+                    Critical Risk Only
+                </button>
+
+                <button id="btn-severity" aria-controls="results-container">
+                    Sort by Severity
+                </button> 
+            </div>
+        </section>
+
+        <div id="status-message" role="status" aria-live="polite"></div>
+
+
+        <section id="results-container" aria-label="Country Health Data Cards">
+            <div class="data-card" aria-label="[COUNTRY NAME] Health Data for [YEAR]">
+                <div class="card-details">
+                    <h3>Nigeria</h3>
+                    <div class="data-year">
+                        <p>Latest Data: 2023</p>
+                        <p>Health Indicator: Malaria Incidence (per 1k)</p>
+                    </div>
+                </div>
+                <div class="card-data-value">
+                    <div class="data-value">[VALUE]</div>
+                </div>
+            </div>
+
+            <div class="data-card" aria-label="[COUNTRY NAME] Health Data for [YEAR]">
+                <div class="card-details">
+                    <h3>Angola</h3>
+                    <div class="data-year">
+                        <p>Latest Data: 2023</p>
+                        <p>Health Indicator: Malaria Incidence (per 1k)</p>
+                    </div>
+                </div>
+                <div class="card-data-value">
+                    <div class="data-value">[VALUE]</div>
+                </div>
+            </div>
+
+            <div class="data-card" aria-label="[COUNTRY NAME] Health Data for [YEAR]">
+                <div class="card-details">
+                    <h3>Gambia</h3>
+                    <div class="data-year">
+                        <p>Latest Data: 2023</p>
+                        <p>Health Indicator: Malaria Incidence (per 1k)</p>
+                    </div>
+                </div>
+                <div class="card-data-value">
+                    <div class="data-value">[VALUE]</div>
+                </div>
+            </div>
+
+            <div class="data-card" aria-label="[COUNTRY NAME] Health Data for [YEAR]">
+                <div class="card-details">
+                    <h3>Gabon</h3>
+                    <div class="data-year">
+                        <p>Latest Data: 2023</p>
+                        <p>Health Indicator: Malaria Incidence (per 1k)</p>
+                    </div>
+                </div>
+                <div class="card-data-value">
+                    <div class="data-value">[VALUE]</div>
+                </div>
+            </div>
+
+            <div class="data-card" aria-label="[COUNTRY NAME] Health Data for [YEAR]">
+                <div class="card-details">
+                    <h3>Kenya</h3>
+                    <div class="data-year">
+                        <p>Latest Data: 2023</p>
+                        <p>Health Indicator: Malaria Incidence (per 1k)</p>
+                    </div>
+                </div>
+                <div class="card-data-value">
+                    <div class="data-value">[VALUE]</div>
+                </div>
+            </div>
+
+            <div class="data-card" aria-label="[COUNTRY NAME] Health Data for [YEAR]">
+                <div class="card-details">
+                    <h3>Tunisia</h3>
+                    <div class="data-year">
+                        <p>Latest Data: 2023</p>
+                        <p>Health Indicator: Malaria Incidence (per 1k)</p>
+                    </div>
+                </div>
+                <div class="card-data-value">
+                    <div class="data-value">[VALUE]</div>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+
+    <footer role="contentinfo">
+        <hr aria-hidden="true"> <p>
+            Data Source: <a href="https://data.worldbank.org/" target="_blank" rel="noopener noreferrer">World Bank GHO API</a> 
+            <br>
+            &copy;Jeremiah Jewel Emmanuel, 2025
+        </p>
+    </footer>
+
+    <script src="js/app.js"></script> 
+</body>
+</html>
