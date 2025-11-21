@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="AFRO VITA: An interactive dashboard tracking urban health and resources across the African continent using World Bank Data.">
     <title>AFRO VITA - African Health Dashboard</title>
-    <link rel="stylesheet" href="css/styles.css"> 
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
 </head>
 <body>
+    
 
     <header role="banner">
         <h1>AFRO VITA</h1>
@@ -28,6 +30,7 @@
                 </select> <br>
                 </div>
 
+                <div class="desktop-region-year">
                 <div class="region">
                 <label for="region" class="sr-only">Region:</label>
                 <select id="region" name="region" aria-controls="results-container">
@@ -35,7 +38,7 @@
                     <option value="North">North Arfica</option>
                     <option value="East">East Africa</option>
                     <option value="West">West Africa</option>
-                    <option value="West">Central Africa</option>
+                    <option value="Central">Central Africa</option>
                     <option value="South">South Africa</option>
                 </select> <br>
                 </div>
@@ -55,6 +58,7 @@
                     <option value="2014">2014</option>
                     <option value="2013">2013</option>
                 </select> <br>
+                </div>
                 </div>
             </div>
 

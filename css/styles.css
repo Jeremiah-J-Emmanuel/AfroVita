@@ -56,19 +56,21 @@ header p {
     margin-bottom: 10px;
     padding-top: 10px;
     border-radius: 5px;
-    height: 250px;
-    width: 95vw;   
+    height: 220px;
+    width: 95vw;
 }
 
 
 .health-indicator {
-    display: flex;
-    padding-bottom: 5px;
+    padding-bottom: 15px;
 }
 
 
 .region {
-    display: flex;
+    padding-bottom: 15px;
+}
+
+.year {
     padding-bottom: 15px;
 }
 
@@ -106,8 +108,7 @@ button {
 }
 
 #btn-severity {
-    margin-left: 2px
-
+    margin-bottom: 15px;
 }
 
 .filters {
@@ -127,22 +128,18 @@ button {
     margin: -1px;
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
-    white-space: nowrap; /* Prevents text from wrapping */
+    white-space: nowrap;
     border: 0;
 }
 
 
 /*LAYOUT CONTAINER */
 main {
-    max-width: 400px;
-    width: 100%;
+    width: 100vw;
     background-color: var(--card-bg);
     border-radius: var(--radius) * 1.5;
     box-shadow: var(--shadow);
-    padding: 15px 25px;
     flex-grow: 1;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 
@@ -153,10 +150,18 @@ body {
     line-height: 1.6;
     display: flex;    
     flex-direction: column;
-    min-height: 100vh;     
-    padding: 0; 
+    min-height: 100vh;
 }
 
+#results-container {
+    background-color: #e3e3e3;
+    margin-left: 0;
+    margin-right: 0;
+    width: 100vw;
+    padding-top: 40px;
+    display: flex;
+    flex-wrap: wrap;
+}
 
 .data-card {
     background-color: #d32f2f;
@@ -164,7 +169,119 @@ body {
     padding: 20px;
     border-radius: 20px;
     margin-bottom:20px ;
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 90vw;
 }
+
+
 footer {
 text-align: center;
+}
+
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    main {
+    min-width: 768px;
+    max-width: 1024px;
+    }
+
+
+    .data-card {
+    margin-left: 6vw;
+    margin-right: 6vw;
+    margin-bottom: 40px;
+    }
+
+    button {
+    width: 39vw;
+    font-size: large;
+    }
+
+    #btn-critical {
+    margin-bottom: 15px;
+    margin-right: 10px;
+    }
+
+    #btn-severity {
+    margin-bottom: 15px;
+    margin-left: 10px
+    }
+
+    #controls {
+    margin-bottom: 30px;  
+    }
+    
+    header h1 {
+    font-size: 2.8rem;
+    color: var(--text-dark);
+    }
+
+
+    header p {
+    color: var(--text-light);
+    font-size: larger;
+    }
+
+}
+
+@media screen and (min-width: 1024px) {
+  /* CSS rules for standard laptop screens */
+  body {
+    font-size: 16px;
+  }
+  .container {
+    max-width: 960px;
+  }
+
+.desktop-region-year select{
+    width: 18vw;
+}
+
+.desktop-region-year{
+    display: flex;
+    width: 40vw;
+    justify-content: space-between;
+}
+
+
+
+#controls {
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: 250px;
+    width: 90vw;
+    margin: auto;
+    margin-bottom: 40px; 
+    justify-content: center;
+    
+}
+
+select{
+    height: 50px;
+    width: 40vw;    
+    border-radius: 5px;
+    padding-left: 10px;
+    font-size: 20px;
+    color: var(--text-dark);
+
+}
+
+button {
+    width: 15vw;
+    margin-left: 3vw;
+    font-size: 20px;
+    height: 50px;
+}
+
+.control-group {
+    flex-direction: column;
+}
+
+
+.data-card {
+    width: 30vw;
+}
+
+
 }
