@@ -1,3 +1,54 @@
+// Show welcome alerts only after the page has rendered cards (so charts can load first)
+const storageKey = 'hasVisitedBefore';
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (localStorage.getItem(storageKey)) return;
+
+    const resultsContainer = document.getElementById('results-container');
+
+    function showAlertsAndMarkVisited() {
+        alert(`Welcome to AfroVita, the urban health and resource tracker for Africa.
+This is a web application that makes use of the World Bank Data API that displays the health data for the 54 African countries recognized by the United Nations.`);
+
+        alert(`TIPS on AfroVita
+As mentioned earlier, AfroVita gets the data for all African Countries.
+However, not all African Countries have data for the selected years so they will not be reflected in the app.
+Some countries also have gaps in their data. These gaps in a country's data will be represented by dotted lines.`);
+
+        alert(`AfroVita Tutorial
+There are four health indicators to choose from, and you can view data as old as 2013 by changing the year.
+You can also make use of sorting and filters like sorting by 'Severity' which lists countries from worst to best, and the 'Critical Risk Only' filter which selects countries worse than the region's average.
+You can also apply more than one filter.`);
+
+        localStorage.setItem(storageKey, 'true');
+    }
+
+    // If resultsContainer exists, wait for it to get children (cards inserted by renderData)
+    if (resultsContainer) {
+        const observer = new MutationObserver((mutations, obs) => {
+            if (resultsContainer.children.length > 0) {
+                obs.disconnect();
+                // small delay to allow canvases to be painted
+                setTimeout(showAlertsAndMarkVisited, 100);
+            }
+        });
+        observer.observe(resultsContainer, { childList: true });
+
+        // fallback: if no cards appear within 8s, show alerts anyway
+        const fallback = setTimeout(() => {
+            observer.disconnect();
+            showAlertsAndMarkVisited();
+        }, 8000);
+
+        // cancel fallback if alerts shown earlier
+        const originalShow = showAlertsAndMarkVisited;
+        showAlertsAndMarkVisited = () => { clearTimeout(fallback); originalShow(); };
+    } else {
+        // If the container isn't present for some reason, show alerts after a short delay
+        setTimeout(showAlertsAndMarkVisited, 1000);
+    }
+});
+
 const AFRICAN_COUNTRIES = [
     { code: 'DZ', name: 'Algeria', region: 'North' },
     { code: 'AO', name: 'Angola', region: 'South' },
@@ -150,8 +201,8 @@ function getHistoricalYears(endYear) {
 
 
 /**
- * Fetch historical data from the World Bank API for a given indicator and year.
- * Populates `app.fullData` with a structure: { [iso2]: { [year]: number|null } }
+ * This fetches historical data from the World Bank API for a given indicator and year.
+ * Populates `app.fullData` with the structure: { [iso2]: { [year]: number|null } }
  */
 async function fetchDataForIndicator(indicatorCode, year) {
     updateStatus(`🌎 Fetching historical data for ${indicatorCode} (Trend: ${parseInt(year) - 5} to ${year})...`, 'loading');
@@ -160,10 +211,28 @@ async function fetchDataForIndicator(indicatorCode, year) {
     const apiUrl = `https://api.worldbank.org/v2/country/all/indicator/${indicatorCode}?date=${startYear}:${year}&format=json&per_page=20000`;
 
     try {
-        const resp = await fetch(apiUrl);
-        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        //Make a few attempts with exponential backoff in case of transient network/API issues
+        const maxAttempts = 3;
+        let attempt = 0;
+        let lastError = null;
+        let json = null;
 
-        const json = await resp.json();
+        while (attempt < maxAttempts) {
+            try {
+                const resp = await fetch(apiUrl);
+                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                json = await resp.json();
+                break; //success
+            } catch (err) {
+                lastError = err;
+                attempt++;
+                const waitMs = 500 * Math.pow(2, attempt); //exponential backoff: 1s,2s,4s...
+                await new Promise(r => setTimeout(r, waitMs));
+            }
+        }
+
+        if (!json) throw lastError || new Error('Unknown network error');
+
         const dataArray = Array.isArray(json) && json[1] ? json[1] : [];
 
         //Initialize structure for the African country list and requested years
@@ -185,14 +254,71 @@ async function fetchDataForIndicator(indicatorCode, year) {
             }
         });
 
+        //This will save a copy in localStorage so we can fall back if API goes down later
+        try {
+            saveToCache(indicatorCode, year, historicalData);
+        } catch (e) {
+            //ignore cache errors
+            console.warn('Failed to save cache', e);
+        }
+
         app.fullData.set(indicatorCode, historicalData);
         updateStatus(`✅ Historical data loaded from World Bank.`, 'success');
         return true;
     } catch (err) {
         console.error(err);
-        updateStatus(`❌ Failed to fetch World Bank data: ${err.message}`, 'error');
+        //If fetch completely failed the code below will attempt to load a cached copy from localStorage
+        const cached = loadFromCache(indicatorCode, year);
+        if (cached) {
+            app.fullData.set(indicatorCode, cached.data);
+            updateStatus(`⚠️ Couldn't reach API — using cached data from ${new Date(cached.ts).toLocaleString()}.`, 'error');
+            return true;
+        }
+
+        //No cached data available — provide the user a retry button in the status area
+        showRetryInStatus(`❌ Failed to fetch World Bank data `, indicatorCode, year);
         return false;
     }
+}
+
+
+//This will save a JSON serializable snapshot (JSON that can be converted to a string) to localStorage as a simple cache
+function saveToCache(indicatorCode, year, data) {
+    const key = `afrovita_cache_${indicatorCode}_${year}`;
+    const payload = { ts: Date.now(), data };
+    localStorage.setItem(key, JSON.stringify(payload));
+}
+
+//This loads cached snapshot if there are
+function loadFromCache(indicatorCode, year) {
+    try {
+        const key = `afrovita_cache_${indicatorCode}_${year}`;
+        const raw = localStorage.getItem(key);
+        if (!raw) return null;
+        return JSON.parse(raw);
+    } catch (e) {
+        console.warn('Failed to read cache', e);
+        return null;
+    }
+}
+
+//Show a retry button in the status area so the user can attempt another fetch
+function showRetryInStatus(msg, indicatorCode, year) {
+    const { statusMessage } = app.dom;
+    statusMessage.innerHTML = '';
+    const span = document.createElement('span');
+    span.textContent = msg;
+    const btn = document.createElement('button');
+    btn.textContent = 'Retry';
+    btn.style.marginLeft = '8px';
+    btn.addEventListener('click', async () => {
+        statusMessage.textContent = '';
+        updateStatus('🔁 Retrying...', 'loading');
+        const ok = await fetchDataForIndicator(indicatorCode, year);
+        if (ok) renderData(false);
+    });
+    statusMessage.appendChild(span);
+    statusMessage.appendChild(btn);
 }
 
 
@@ -352,7 +478,10 @@ async function renderData(triggerFetch = false) {
     /*Decide if lower numbers are worse for this indicator (access metrics use lower=worse)
     This is because, for some health indicators, lower values, like basic drinking water access are bad,
     but for Malaria, they are good.*/
-    
+    // If there's no network and no cached snapshot, tell the user explicitly and stop
+    const cache = loadFromCache(app.currentIndicator, app.currentYear);
+    const online = typeof navigator !== 'undefined' ? navigator.onLine : true;
+
     const isAccessIndicator = app.currentIndicator.includes('.ZS'); 
 
     //The below applies a region filter when a region that is not General is selected.
@@ -509,4 +638,5 @@ function initApp() {
 
 
     renderData(true); //Start up the code
+    
 }
