@@ -7,6 +7,7 @@ Afro Vita is a web application where organizations and individuals can get infor
 ---
 
 ## Link to Demo Video
+https://www.youtube.com/watch?v=5P0eVBEZZno
 
 
 ## Features
@@ -111,7 +112,7 @@ After I restarted the web-02 with this command: sudo systemctl start nginx, the 
 - API: World Bank Indicators API
 - Documentation: [World Bank API](https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation)
 - The API does not need API Keys.
-- Errors are Handled: if API is down, the app used cached data or if there is no cached data, it displays "Could not retrieve data for this indicator".
+- Errors are Handled: if API is down, the app displays "Could not retrieve data for this indicator".
 
 
 ![Error handling incase of api downtime or lack of internet connection](./images/failed-to-fetch.png)
