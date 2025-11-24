@@ -122,9 +122,13 @@ After I restarted the web-02 with this command: sudo systemctl start nginx, the 
     ```bash
         git clone https://github.com/Jeremiah-J-Emmanuel/AfroVita.git
 
-2. Enter into the directory: cd AfroVita
+2. Enter into the directory:
+    ```bash
+        cd ./AfroVita
 
-3. Open the file by running open ./index.html
+3. Open the file by running open
+    ```bash
+        ./index.html
 
 
 ## Notes about the Application
