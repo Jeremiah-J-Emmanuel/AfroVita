@@ -47,7 +47,7 @@ https://www.youtube.com/watch?v=5P0eVBEZZno
 ![View of AfroVita on Mobile](./images/mobile-view.png)
 
 ### Tablet View
-![View of AfroVita on Tablet](./images/tablet-view.png)
+![View of AfroVita on a Tablet](./images/tablet-view.png)
 
  ---
 
