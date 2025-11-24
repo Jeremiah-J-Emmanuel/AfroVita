@@ -52,8 +52,14 @@ Afro Vita is a web application where organizations and individuals can get infor
 
 ## How I Deployed the Application to the Servers 
 
-1. I SSHed into the web-01 and web-02 server with this command: ssh -i  ./school ubuntu@3.84.37.39(for web-01) / ubuntu@18.206.244.77 (For web-02)
-2. I installed nginx on the webservers with this command: sudo apt update && sudo apt install nginx
+1. I SSHed into the web-01 and web-02 server with this command:
+    ```bash
+    ssh -i  ./school ubuntu@3.84.37.39(for web-01) / ubuntu@18.206.244.77 (For web-02)
+
+2. I installed nginx on the webservers with this command:
+    ```bash
+    sudo apt update && sudo apt install nginx
+
 3. I changed the web servers' (web-01 and web 02) html page from the default nginx html landing page to the files for my own project and put all my source code /var/www/html
 4. I Configured the Nginx to serve the application:
     ```nginx
@@ -68,7 +74,7 @@ Afro Vita is a web application where organizations and individuals can get infor
         location / {
                 try_files $uri $uri/ =404;
         }
-}
+    }
 
 
 ## How I Configured the Load balancer to Serve the web-01 and web-02
@@ -76,23 +82,27 @@ Afro Vita is a web application where organizations and individuals can get infor
 2. I activated the haproxy with this code: sudo systemctl enable haproxy && sudo systemctl start haproxy
 
 3. I configured my load balancer to distrubute traffic to the two web servers using round-robin by using this code:
-    frontend http_front
-        bind *:80
-        default_backend web_servers
+    ```bash
+        frontend http_front
+            bind *:80
+            default_backend web_servers
 
-    backend web_servers
-        balance roundrobin
-        server web01 3.84.37.39:80 check (This is for web-01)
-        server web02 18.206.244.77:80 check (This is for web-02)
+        backend web_servers
+            balance roundrobin
+            server web01 3.84.37.39:80 check (This is for web-01)
+            server web02 18.206.244.77:80 check (This is for web-02)
 4. I tested the distribution of the requests to the webservers, by using a for loop
-    for i in {1..10}; do curl -sI http://54.236.227.220 | grep X-Served-By; done
+    ```bash
+        for i in {1..10}; do curl -sI http://54.236.227.220 | grep X-Served-By; done
     The output was an alternating X-Served-By-web-01, X-Served-By-web02...
 
 5. I shut off the nginx on web-02 and then ran the for loop again to test if the load balancer will send all requests to the one that is working.
 
 The load balancer sent the requests to only web-01 when web-02 was shut off.
 
-This is the code that I used to do this after sshing to web-02: sudo systemctl stop nginx
+This is the code that I used to do this after sshing to web-02: 
+    ```bash
+        sudo systemctl stop nginx
 
 After I restarted the web-02 with this command: sudo systemctl start nginx, the Load balancer resumed the distribution of requests to the both servers.
 
@@ -108,7 +118,9 @@ After I restarted the web-02 with this command: sudo systemctl start nginx, the 
 
 
 ## How to run the app locally- To clone the respository
-1. In your terminal, run git clone https://github.com/Jeremiah-J-Emmanuel/AfroVita.git
+1. In your terminal, run 
+    ```bash
+        git clone https://github.com/Jeremiah-J-Emmanuel/AfroVita.git
 
 2. Enter into the directory: cd AfroVita
 
