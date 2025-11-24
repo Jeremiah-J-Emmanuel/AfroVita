@@ -58,7 +58,7 @@ Afro Vita is a web application where organizations and individuals can get infor
 
 2. I installed nginx on the webservers with this command:
     ```bash
-    sudo apt update && sudo apt install nginx
+        sudo apt update && sudo apt install nginx
 
 3. I changed the web servers' (web-01 and web 02) html page from the default nginx html landing page to the files for my own project and put all my source code /var/www/html
 4. I Configured the Nginx to serve the application:
