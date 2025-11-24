@@ -205,7 +205,7 @@ function getHistoricalYears(endYear) {
  * Populates `app.fullData` with a structure: { [iso2]: { [year]: number|null } }
  */
 async function fetchDataForIndicator(indicatorCode, year) {
-    updateStatus(`🌎 Fetching historical data for ${indicatorCode} (Trend: ${parseInt(year) - 5} to ${year})...`, 'loading');
+    updateStatus(`Fetching historical data for ${indicatorCode} (Trend: ${parseInt(year) - 5} to ${year})...`, 'loading');
 
     const startYear = parseInt(year) - 5;
     const apiUrl = `https://api.worldbank.org/v2/country/all/indicator/${indicatorCode}?date=${startYear}:${year}&format=json&per_page=20000`;
@@ -237,11 +237,11 @@ async function fetchDataForIndicator(indicatorCode, year) {
         });
 
         app.fullData.set(indicatorCode, historicalData);
-        updateStatus(`✅ Historical data loaded from World Bank.`, 'success');
+        updateStatus(` Historical data loaded from World Bank.`, 'success');
         return true;
     } catch (err) {
         console.error(err);
-        updateStatus(`❌ Failed to fetch World Bank data: ${err.message}`, 'error');
+        updateStatus(` Failed to fetch World Bank data: ${err.message}`, 'error');
         return false;
     }
 }
@@ -423,14 +423,14 @@ async function renderData(triggerFetch = false) {
         );
 
         //This tells the user how many countries are flagged as critical
-        updateStatus(`⚠️ Showing ${processedData.length} countries at critical risk (vs. regional average of ${average.toFixed(2)}).`, 'error');
+        updateStatus(`Showing ${processedData.length} countries at critical risk (vs. regional average of ${average.toFixed(2)}).`, 'error');
     }
     
     //Sort by Severity shows the worst-performing countries first
     if (app.sortActive) {
         //For access-type indicators (basic drinking water access), lower is worse so sort ascending. For othe=r types of indicators, sort descending
         processedData.sort((a, b) => isAccessIndicator ? a.value - b.value : b.value - a.value);
-        updateStatus(`📈 Data sorted by severity.`, 'success');
+        updateStatus(`Data sorted by severity.`, 'success');
     }
 
     //Build the HTML cards for each country we're showing
@@ -491,7 +491,7 @@ async function renderData(triggerFetch = false) {
     }, 50); //This adds a small delay to ensure the canvases are fully set up
     //Final status to the user about how many cards are visible
     if (!app.filterActive && !app.sortActive) {
-         updateStatus(`📊 Displaying ${processedData.length} countries. Click a filter to analyze trends.`, 'success');
+         updateStatus(`Displaying ${processedData.length} countries. Click a filter to analyze trends.`, 'success');
     }
 }
 
