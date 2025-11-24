@@ -16,7 +16,7 @@ However, not all African Countries have data for the selected years so they will
 Some countries also have gaps in their data. These gaps in a country's data will be represented by dotted lines.`);
 
         alert(`AfroVita Tutorial
-There are four health indicators to choose from, and you can view data as old as 2013 by changing the year.
+There are four health indicators to choose from: Malaria, Typhoid Proxy, Infant Mortality, and Basic Drinking Water Access.
 You can also make use of sorting and filters like sorting by 'Severity' which lists countries from worst to best, and the 'Critical Risk Only' filter which selects countries worse than the region's average.
 You can also apply more than one filter.`);
 

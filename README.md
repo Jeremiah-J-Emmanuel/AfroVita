@@ -118,4 +118,9 @@ After I restarted the web-02 with this command: sudo systemctl start nginx, the 
 ## Notes about the Application
 Because there are inconsistencies in data, especially data about Africa, some countries may be missing data for some years.
 Countries that miss data for the entire timeline that we are recording which is from 2023-2018 will not be included when data is fetched.
-Also, gaps in the data of countries between 2023 and 2018 will be represented with 
+Also, gaps in the data of countries between 2023 and 2018 will be represented with dotted lines on the graph.
+
+## How to use the app.
+There are four health indicators to choose from: Malaria, Typhoid Proxy, Infant Mortality, and Basic Drinking Water Access.
+You can also make use of sorting and filters like sorting by 'Severity' which lists countries from worst to best, and the 'Critical Risk Only' filter which selects countries worse than the region's average.
+You can also apply more than one filter.
